@@ -30,7 +30,16 @@
       .then((profile) => {
         if (!profile) return;
         alert("UID: " + profile.userId);
-        window.location.replace(FORMBRIDGE_URL + "?line_uid=" + profile.userId);
+        .then((profile) => {
+  if (!profile) return;
+  const uid = profile.userId;
+  const url = FORMBRIDGE_URL + "?line_uid=" + uid;
+  alert("リダイレクト先: " + url); // 確認用
+  liff.openWindow({
+    url: url,
+    external: false
+  });
+})
       })
       .catch((err) => {
         alert("エラー: " + err.message);
@@ -38,3 +47,4 @@
   </script>
 </body>
 </html>
+
