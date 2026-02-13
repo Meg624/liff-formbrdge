@@ -31,7 +31,7 @@
         const url = FORMBRIDGE_URL + "?line_uid=" + uid + "&t=" + new Date().getTime();
         liff.openWindow({
           url: url,
-          external: false
+          external: true
         });
       })
       .catch((err) => {
@@ -40,5 +40,6 @@
   </script>
 </body>
 </html>
+
 
 
