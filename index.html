@@ -5,11 +5,7 @@
   <title>Loading...</title>
   <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
   <style>
-    body {
-      background-color: #06C755;
-      margin: 0;
-      height: 100vh;
-    }
+    body { background-color: #06C755; margin: 0; height: 100vh; }
   </style>
 </head>
 <body>
@@ -19,27 +15,24 @@
 
     liff.init({ liffId: LIFF_ID })
       .then(() => {
-        alert("init完了 / ログイン状態: " + liff.isLoggedIn());
-
-        if (!liff.isLoggedIn()) {
-          liff.login({ redirectUri: "https://Meg624.github.io/liff-formbrdge/" });
-          return;
+        if (liff.isInClient()) {
+          return liff.getProfile();
+        } else {
+          if (!liff.isLoggedIn()) {
+            liff.login();
+            return;
+          }
+          return liff.getProfile();
         }
-        return liff.getProfile();
       })
       .then((profile) => {
         if (!profile) return;
-        alert("UID: " + profile.userId);
-        .then((profile) => {
-  if (!profile) return;
-  const uid = profile.userId;
-  const url = FORMBRIDGE_URL + "?line_uid=" + uid;
-  alert("リダイレクト先: " + url); // 確認用
-  liff.openWindow({
-    url: url,
-    external: false
-  });
-})
+        const uid = profile.userId;
+        const url = FORMBRIDGE_URL + "?line_uid=" + uid + "&t=" + new Date().getTime();
+        liff.openWindow({
+          url: url,
+          external: false
+        });
       })
       .catch((err) => {
         alert("エラー: " + err.message);
@@ -47,4 +40,5 @@
   </script>
 </body>
 </html>
+
 
