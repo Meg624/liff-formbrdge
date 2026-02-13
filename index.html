@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Loading...</title>
+  <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+</head>
+<body>
+  <p>読み込み中...</p>
+  <script>
+    const LIFF_ID = "2008019087-kwZKsT3i";
+    const FORMBRIDGE_URL = "https://a1df22ff.form.kintoneapp.com/public/adeadd451913848c81783ab52470a69da29926e802cdda7b02ca55d317c4e408";
+
+    liff.init({ liffId: LIFF_ID })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+        return liff.getProfile();
+      })
+      .then((profile) => {
+        const lineUid = profile.userId;
+        window.location.href = FORMBRIDGE_URL + "?line_uid=" + lineUid;
+      })
+      .catch((err) => {
+        console.error("エラー:", err);
+        alert("エラーが発生しました。再度お試しください。");
+      });
+  </script>
+</body>
+</html>
+```
+
+4. 「**Commit new file**」をクリック
+
+---
+
+### ③ GitHub Pagesを有効化
+
+1. リポジトリの「**Settings**」タブをクリック
+2. 左メニュー「**Pages**」をクリック
+3. Source：「**Deploy from a branch**」
+4. Branch：「**main**」「**/ (root)**」を選択
+5. 「**Save**」をクリック
+6. しばらく待つと以下のURLが発行される
+```
+https://あなたのGitHubユーザー名.github.io/liff-formbridge/
