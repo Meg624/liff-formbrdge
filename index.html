@@ -28,10 +28,15 @@
         }
         return liff.getProfile();
       })
-      .then((profile) => {
-        if (!profile) return;
-        const lineUid = profile.userId;
-        window.location.replace(FORMBRIDGE_URL + "?line_uid=" + lineUid);
+    .then((profile) => {
+  if (!profile) {
+    alert("プロフィール取得失敗");
+    return;
+  }
+  const lineUid = profile.userId;
+  alert("取得したUID: " + lineUid); // デバッグ用
+  window.location.replace(FORMBRIDGE_URL + "?line_uid=" + lineUid);
+})
       })
       .catch((err) => {
         console.error("エラー:", err);
@@ -40,5 +45,6 @@
   </script>
 </body>
 </html>
+
 
 
