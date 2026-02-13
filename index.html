@@ -7,11 +7,8 @@
   <style>
     body {
       background-color: #06C755;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
+      height: 100vh;
     }
   </style>
 </head>
@@ -22,29 +19,22 @@
 
     liff.init({ liffId: LIFF_ID })
       .then(() => {
+        alert("init完了 / ログイン状態: " + liff.isLoggedIn());
+
         if (!liff.isLoggedIn()) {
-          liff.login();
+          liff.login({ redirectUri: "https://Meg624.github.io/liff-formbrdge/" });
           return;
         }
         return liff.getProfile();
       })
-    .then((profile) => {
-  if (!profile) {
-    alert("プロフィール取得失敗");
-    return;
-  }
-  const lineUid = profile.userId;
-  alert("取得したUID: " + lineUid); // デバッグ用
-  window.location.replace(FORMBRIDGE_URL + "?line_uid=" + lineUid);
-})
+      .then((profile) => {
+        if (!profile) return;
+        alert("UID: " + profile.userId);
+        window.location.replace(FORMBRIDGE_URL + "?line_uid=" + profile.userId);
       })
       .catch((err) => {
-        console.error("エラー:", err);
         alert("エラー: " + err.message);
       });
   </script>
 </body>
 </html>
-
-
-
