@@ -48,7 +48,7 @@ liff-formbridge/
 3. **LIFF** タブ → LIFFアプリを追加
    - サイズ：Full
    - スコープ：`profile` にチェック
-   - エンドポイントURL：`https://あなたのGitHubユーザー名.github.io/liff-formbridge/`
+   - エンドポイントURL：`https://あなたのGitHubユーザー名.github.io/liff-formbrdge/`（スペルミスあり）
 4. 発行された **LIFF ID** をメモしておく
 
 ---
