@@ -1,45 +1,115 @@
 <!DOCTYPE html>
+<!-- このファイルはWebページの基本構造を定義しています -->
 <html lang="ja">
+<!-- lang="ja" は日本語のページであることを示しています -->
+
 <head>
+  <!-- headタグ内には画面に表示しない設定情報を書きます -->
+
   <meta charset="UTF-8">
+  <!-- 日本語が正しく表示されるよう文字コードをUTF-8に設定しています -->
+
   <title>Loading...</title>
+  <!-- ブラウザのタブに表示されるタイトルです。処理中なので「Loading...」にしています -->
+
   <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+  <!-- LINEのLIFF機能を使うために必要なプログラムをLINEのサーバーから読み込んでいます -->
+
   <style>
-    body { background-color: #06C755; margin: 0; height: 100vh; }
+    /* styleタグ内はページの見た目を設定します */
+    body {
+      background-color: #06C755;
+      /* 背景色をLINEのグリーンにしています。遷移中に白い画面が一瞬見えないようにするためです */
+      margin: 0;
+      /* 画面の余白をゼロにしています */
+      height: 100vh;
+      /* 画面の高さいっぱいに広げています（100vh = 画面の高さ100%）*/
+    }
   </style>
 </head>
+
 <body>
+  <!-- bodyタグ内に実際に表示される内容を書きます。今回は画面に何も表示しません -->
+
   <script>
+    // scriptタグ内にJavaScript（プログラム）を書きます
+
     const LIFF_ID = "2008019087-kwZKsT3i";
+    // LIFFアプリを識別するIDです。LINE DevelopersのLIFF設定画面で確認できます
+
     const FORMBRIDGE_URL = "https://a1df22ff.form.kintoneapp.com/public/adeadd451913848c81783ab52470a69da29926e802cdda7b02ca55d317c4e408";
+    // リダイレクト先のFormBridgeフォームのURLです
 
     liff.init({ liffId: LIFF_ID })
+    // LIFFを起動します。liffIdに上で設定したIDを渡します
+
       .then(() => {
+        // LIFFの起動が完了したら次の処理を行います
+
         if (liff.isInClient()) {
+          // LINEアプリの中からアクセスしているか確認します
+
           return liff.getProfile();
+          // LINEアプリ内からのアクセスなら、そのままユーザー情報を取得します
+
         } else {
+          // LINEアプリ外（ブラウザなど）からアクセスした場合の処理です
+
           if (!liff.isLoggedIn()) {
+            // LINEにログインしていない場合の処理です
+
             liff.login();
+            // LINEのログイン画面に移動します
+
             return;
+            // ログイン画面に移動するのでここで処理を止めます
           }
+
           return liff.getProfile();
+          // ログイン済みであればユーザー情報を取得します
         }
       })
+
       .then((profile) => {
+        // ユーザー情報の取得が完了したら次の処理を行います
+
         if (!profile) return;
+        // ユーザー情報が取得できなかった場合はここで処理を止めます
+
         const uid = profile.userId;
-        const url = FORMBRIDGE_URL + "?line_uid=" + uid + "&t=" + new Date().getTime();
+        // 取得したユーザー情報からLINE IDを取り出して「uid」という名前で保存します
+
+        const lineName = encodeURIComponent(profile.displayName);
+        // LINEの表示名（LINE名）を取得します
+        // encodeURIComponent() は日本語や特殊文字をURLで使える形式に変換します
+        // 例：「山田 太郎」→「%E5%B1%B1%E7%94%B0%20%E5%A4%AA%E9%83%8E」
+        // FormBridgeが受け取ると自動で元の文字（山田 太郎）に戻して保存します
+
+        const url = FORMBRIDGE_URL
+          + "?line_uid=" + uid
+          // URLの末尾にLINE IDを付け加えます（FormBridgeの line_uid フィールドに入ります）
+
+          + "&line_name=" + lineName
+          // LINE名を付け加えます（FormBridgeの line_name フィールドに入ります）
+
+          + "&t=" + new Date().getTime();
+          // 毎回異なる数字を付けてキャッシュ（古いページの読み込み）を防ぎます
+
         liff.openWindow({
           url: url,
+          // 上で作ったURLを開きます
           external: true
+          // trueにするとLINEアプリの外部ブラウザでURLを開きます
         });
       })
+
       .catch((err) => {
+        // 上のどこかでエラーが起きた場合にここで受け取ります
+
         alert("エラー: " + err.message);
+        // エラーの内容を画面にポップアップで表示します
       });
+
   </script>
 </body>
 </html>
-
-
-
